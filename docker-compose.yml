@@ -1,7 +1,6 @@
 version: "3.8"  # optional since v1.27.0
 services:
   api:
-    build: .
     image: poc-1:latest
     volumes:
       - ./:/prometheus-poc-1
@@ -10,7 +9,16 @@ services:
     depends_on:
       - db
       - redis
+      - sidekiq
     command: bundle exec rails server --port=3000 --binding=0.0.0.0
+  sidekiq:
+    image: poc-1:latest
+    volumes:
+      - ./:/prometheus-poc-1
+    depends_on:
+      - db
+      - redis
+    command: bundle exec sidekiq
   redis:
     image: redis:latest
     volumes:
