@@ -22,11 +22,14 @@ services:
   redis:
     image: redis:latest
     volumes:
-      - ./tmp/redis:/data
+      - redis-data:/data
   db:
     image: postgres:latest
     volumes:
-      - ./tmp/postgres:/var/lib/postgres/data
+      - db-data:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: admin
       POSTGRES_USER: admin
+volumes:
+  redis-data:
+  db-data:
