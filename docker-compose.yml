@@ -1,0 +1,24 @@
+version: "3.8"  # optional since v1.27.0
+services:
+  api:
+    build: .
+    image: poc-1:latest
+    volumes:
+      - ./:/prometheus-poc-1
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+      - redis
+    command: bundle exec rails server --port=3000 --binding=0.0.0.0
+  redis:
+    image: redis:latest
+    volumes:
+      - ./tmp/redis:/data
+  db:
+    image: postgres:latest
+    volumes:
+      - ./tmp/postgres:/var/lib/postgres/data
+    environment:
+      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: admin
