@@ -2,6 +2,7 @@ version: "3.8"  # optional since v1.27.0
 services:
   api:
     image: poc-1:latest
+    container_name: poc-1-api
     volumes:
       - ./:/prometheus-poc-1
     ports:
@@ -10,15 +11,26 @@ services:
       - db
       - redis
       - sidekiq
+      - prom-exporter
     command: bundle exec rails server --port=3000 --binding=0.0.0.0
   sidekiq:
     image: poc-1:latest
+    container_name: poc-1-sidekiq
     volumes:
       - ./:/prometheus-poc-1
     depends_on:
       - db
       - redis
+      - prom-exporter
     command: bundle exec sidekiq
+  prom-exporter:
+    image: poc-1:latest
+    container_name: poc-1-prom
+    volumes:
+      - ./:/prometheus-poc-1
+    ports:
+      - "9394:9394"
+    command: bundle exec prometheus_exporter -p 9394 -b 0.0.0.0
   redis:
     image: redis:latest
     volumes:
