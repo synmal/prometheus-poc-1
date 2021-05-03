@@ -7,6 +7,7 @@ services:
       - ./:/prometheus-poc-1
     ports:
       - "3000:3000"
+    env_file: .env
     depends_on:
       - db
       - redis
@@ -16,6 +17,7 @@ services:
   sidekiq:
     image: poc-1:latest
     container_name: poc-1-sidekiq
+    env_file: .env
     volumes:
       - ./:/prometheus-poc-1
     depends_on:
